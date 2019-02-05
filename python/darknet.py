@@ -150,7 +150,7 @@ if __name__ == "__main__":
     #print r[:10]    
     net = load_net("./yolov3.cfg", "./yolov3.weights", 0)
     meta = load_meta("./coco.data")
-    r = detect(net, meta, "/home/manish/Documents/darkflow/data/dog.jpg")
+    r = detect(net, meta, "data/dog.jpg")
     print r
 
 def detect_image(image):
