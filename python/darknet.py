@@ -44,7 +44,7 @@ class METADATA(Structure):
 
     
 
-lib = CDLL("/home/manish/Documents/darkflow/python/libdarknet.so", RTLD_GLOBAL)
+lib = CDLL("./libdarknet.so", RTLD_GLOBAL)
 #lib = CDLL("libdarknet.so", RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
 lib.network_width.restype = c_int
@@ -147,9 +147,9 @@ if __name__ == "__main__":
     #im = load_image("data/wolf.jpg", 0, 0)
     #meta = load_meta("cfg/imagenet1k.data")
     #r = classify(net, meta, im)
-    #print r[:10]
-    net = load_net("/home/manish/Documents/darkflow/cfg/yolov3.cfg", "/home/manish/Documents/darkflow/yolov3.weights", 0)
-    meta = load_meta("/home/manish/Documents/darkflow/cfg/coco.data")
+    #print r[:10]    
+    net = load_net("./yolov3.cfg", "./yolov3.weights", 0)
+    meta = load_meta("./coco.data")
     r = detect(net, meta, "/home/manish/Documents/darkflow/data/dog.jpg")
     print r
 
@@ -161,8 +161,8 @@ def detect_image(image):
     #print r[:10]
     
 
-    net = load_net("/home/manish/Documents/darkflow/cfg/yolov3.cfg", "/home/manish/Documents/darkflow/yolov3.weights", 0)
-    meta = load_meta("/home/manish/Documents/darkflow/cfg/coco.data")
+    net = load_net("./yolov3.cfg", "./yolov3.weights", 0)
+    meta = load_meta("./coco.data")
     r = detect(net, meta, image)
     return r   
     
