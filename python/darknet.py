@@ -4,9 +4,10 @@ import random
 import cv2
 import numpy as np
 from PIL import Image
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-
 
 def sample(probs):
     s = sum(probs)
