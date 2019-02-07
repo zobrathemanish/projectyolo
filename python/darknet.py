@@ -250,8 +250,8 @@ def detect_image(image):
         rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
     fig.show()
-    fig.savefig('/home/manish/Documents/detector/darkflow/python/image.jpg')
+    fig.savefig('./image.jpg')
     #print (r[:10])
-    return r[0]   
+    return r  
     
 
