@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_uploads import UploadSet, configure_uploads, IMAGES
+from Tkinter import *
 from PIL import Image, ExifTags
 import pytesseract
 import urllib
@@ -18,6 +19,7 @@ import operator
 import io
 import os
 import darknet
+#from Tkinter import * 
 
 application = Flask(__name__,static_url_path='/static')
 CORS(application, support_credentials=True)
@@ -52,4 +54,5 @@ def test():
 
 if __name__ == '__main__':
 
-	application.run(debug=True, port=80, host="0.0.0.0")
+    application.run(debug=True, port=80, host="0.0.0.0")
+
