@@ -3,7 +3,7 @@ import math
 import random
 import cv2
 import numpy as np
-from Tkinter import *
+#from Tkinter import *
 from PIL import Image
 #import matplotlib
 #matplotlib.use('Agg')
