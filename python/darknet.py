@@ -5,8 +5,8 @@ import cv2
 import numpy as np
 from Tkinter import *
 from PIL import Image
-import matplotlib
-matplotlib.use('Agg')
+#import matplotlib
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
