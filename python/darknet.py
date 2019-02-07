@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
 
-
 def sample(probs):
     s = sum(probs)
     probs = [a/s for a in probs]
@@ -199,7 +198,7 @@ if __name__ == "__main__":
         bottomLeft_y = center_y - (height / 2)
         rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
-    fig.show()
+   # fig.show()
     fig.savefig('/home/manish/Documents/detector/darkflow/python/image.jpg')
     #print (r[:10])
     print (r[0])
@@ -250,8 +249,12 @@ def detect_image(image):
         rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
     fig.show()
-    fig.savefig('./image.jpg')
+    fig.savefig('./image.jpg',bbox_inches="tight")
     #print (r[:10])
     return r  
     
+    def showimage():
+        image = Image.open('./image.jpg')
+        image.show()
+        return
 
