@@ -250,7 +250,7 @@ def detect_image(image):
         bottomLeft_y = center_y - (height / 2)
         rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
-    fig.show()
+        
     fig.savefig('./image.jpg',bbox_inches="tight")
     #print (r[:10])
     return r  
