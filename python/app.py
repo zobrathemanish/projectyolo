@@ -36,8 +36,8 @@ def upload():
         image=Image.open(fullpath)
         image.save(fullpath)
         result = darknet.detect_image(fullpath)
-        image = Image.open('./image.jpg')
-        image.show()
+        #image = Image.open('./image.jpg')
+        #image.show()
         return jsonify({"result": result})
      
 @application.route('/', methods=['GET', 'POST'])
