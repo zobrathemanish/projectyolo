@@ -6,7 +6,7 @@ import numpy as np
 from Tkinter import *
 from PIL import Image
 import matplotlib
-matplotlib.use('GTK')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
