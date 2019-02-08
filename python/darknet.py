@@ -3,7 +3,7 @@ import math
 import random
 import cv2
 import numpy as np
-#from Tkinter import *
+from Tkinter import *
 from PIL import Image
 #import matplotlib
 #matplotlib.use('Agg')
@@ -250,7 +250,8 @@ def detect_image(image):
         bottomLeft_y = center_y - (height / 2)
         rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
-    fig.show()
+
+    #fig.show()
     fig.savefig('./image.jpg',bbox_inches="tight")
    # image = Image.open('./image.jpg')
    # image.show()
