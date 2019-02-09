@@ -252,7 +252,7 @@ def detect_image(image):
         ax.add_patch(rect)
 
     #fig.show()
-    fig.savefig('./image.jpg',bbox_inches="tight")
+    fig.savefig('./static/image.jpg',bbox_inches="tight")
    # image = Image.open('./image.jpg')
    # image.show()
    # #print (r[:10])

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for, make_response, json
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from Tkinter import *
 from PIL import Image, ExifTags
@@ -21,11 +21,18 @@ import os
 import darknet
 #from Tkinter import * 
 
+#PEOPLE_FOLDER = os.path.join('static', 'people_photo')
+
 application = Flask(__name__,static_url_path='/static')
 CORS(application, support_credentials=True)
 
 photos = UploadSet('photos', IMAGES)
-application.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
+application.config['UPLOADED_PHOTOS_DEST'] = './static'
+
+@application.route('/index', methods=['GET', 'POST'])
+def show_index():
+    full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], 'image.jpg')
+    return render_template("index.html", user_image = full_filename)
 
 @application.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -36,12 +43,18 @@ def upload():
         image=Image.open(fullpath)
         image.save(fullpath)
         result = darknet.detect_image(fullpath)
-        link = "/home/ubuntu/projectyolo/python/image.jpg" 
-        return jsonify({"result": result, "resultimage":link})
+        link = "./image.jpg" 
+        test = json.dumps({"result": result, "resultimage":link},sort_keys = True, indent = 4, separators = (',', ': '))
+
+
+        full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], 'image.jpg')
+        return render_template("index.html",user_image = full_filename, test = test)
+        
      
 @application.route('/', methods=['GET', 'POST'])
 def landing():
     return render_template('landing.html')
+
 
 
 @application.route('/test', methods=['GET', 'POST'])
