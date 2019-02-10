@@ -175,8 +175,7 @@ if __name__ == "__main__":
 
 
      #get detected image
-    im2 = np.array(Image.open(img), dtype=np.uint8)
-    fig,ax = plt.subplots(1) 
+
 
     #for k in range(len(r)):
      #   print r[k][2][0]
@@ -206,7 +205,7 @@ if __name__ == "__main__":
     print (r[0])
 
 
-def detect_image(image):
+def detect_image(image,filename):
     #net = load_net("cfg/densenet201.cfg", "/home/pjreddie/trained/densenet201.weights", 0)
     #im = load_image("data/wolf.jpg", 0, 0)
     #meta = load_meta("cfg/imagenet1k.data")
@@ -251,11 +250,14 @@ def detect_image(image):
         rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
 
+    imagepath = './static/' + filename
+
     #fig.show()
-    fig.savefig('./static/image.jpg',bbox_inches="tight")
+    fig.savefig(imagepath,bbox_inches="tight")
    # image = Image.open('./image.jpg')
    # image.show()
    # #print (r[:10])
+    plt.close()
     return r   
     
     #def showimage():

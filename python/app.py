@@ -19,6 +19,7 @@ import operator
 import io
 import os
 import darknet
+import random
 #from Tkinter import * 
 
 #PEOPLE_FOLDER = os.path.join('static', 'people_photo')
@@ -40,16 +41,16 @@ def upload():
         file = request.files['photo']
         fullpath = file.filename    
         file.save(secure_filename(fullpath))
-        image=Image.open(fullpath)
-        image.save(fullpath)
-        result = darknet.detect_image(fullpath)
+        #image=Image.open(fullpath)
+        #image.save(fullpath)
+        imageFileName = ''.join(random.choice(string.ascii_uppercase) for _ in range(5)) + '.jpg'
+        result = darknet.detect_image(fullpath, imageFileName)
         link = "./image.jpg" 
         test = json.dumps({"result": result, "resultimage":link},sort_keys = True, indent = 4, separators = (',', ': '))
-
-
-        full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], 'image.jpg')
-        return render_template("index.html",user_image = full_filename, test = test)
         
+        full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], imageFileName)
+        #return test
+        return render_template("index.html",user_image = imageFileName, test = test)
      
 @application.route('/', methods=['GET', 'POST'])
 def landing():
