@@ -7,7 +7,7 @@ import urllib
 import requests
 import json
 from flask_cors import CORS, cross_origin
-import os
+import os, sys, shutil
 #import filetype
 import time
 import fileinput
@@ -20,6 +20,7 @@ import io
 import os
 import darknet
 import random
+import detectcv2 as dcv
 #from Tkinter import * 
 
 #PEOPLE_FOLDER = os.path.join('static', 'people_photo')
@@ -44,13 +45,13 @@ def upload():
         #image=Image.open(fullpath)
         #image.save(fullpath)
         imageFileName = ''.join(random.choice(string.ascii_uppercase) for _ in range(5)) + '.jpg'
-        result = darknet.detect_image(fullpath, imageFileName)
-        link = "./image.jpg" 
-        test = json.dumps({"result": result, "resultimage":link},sort_keys = True, indent = 4, separators = (',', ': '))
-        
         full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], imageFileName)
-        #return test
-        return render_template("index.html",user_image = imageFileName, test = test)
+        result = dcv.detect_image(fullpath, imageFileName,full_filename)
+        
+        #result1 = darknet.detect_image(fullpath, imageFileName)
+        #test = json.dumps({"result": result},sort_keys = True, indent = 4, separators = (',', ': '))
+        
+        return render_template("index.html",user_image = imageFileName)
      
 @application.route('/', methods=['GET', 'POST'])
 def landing():

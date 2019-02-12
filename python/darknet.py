@@ -53,7 +53,7 @@ class METADATA(Structure):
     
 
 #lib = CDLL("/home/pjreddie/documents/darknet/libdarknet.so", RTLD_GLOBAL)
-lib = CDLL("./libdarknet.so", RTLD_GLOBAL)
+lib = CDLL("../libdarknet.so", RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
 lib.network_width.restype = c_int
 lib.network_height.argtypes = [c_void_p]
@@ -122,7 +122,6 @@ predict_image = lib.network_predict_image
 predict_image.argtypes = [c_void_p, IMAGE]
 predict_image.restype = POINTER(c_float)
 
-
 def classify(net, meta, im):
     out = predict_image(net, im)
     res = []
@@ -150,69 +149,20 @@ def detect(net, meta, image, thresh=.5, hier_thresh=.5, nms=.45):
     free_image(im)
     free_detections(dets, num)
     return res
-
-def convertBack(x, y, w, h):
-    xmin = int(round(x - (w / 2)))
-    xmax = int(round(x + (w / 2)))
-    ymin = int(round(y - (h / 2)))
-    ymax = int(round(y + (h / 2)))
-    return xmin, ymin, xmax, ymax
-   
+    
 if __name__ == "__main__":
     #net = load_net("cfg/densenet201.cfg", "/home/pjreddie/trained/densenet201.weights", 0)
     #im = load_image("data/wolf.jpg", 0, 0)
     #meta = load_meta("cfg/imagenet1k.data")
     #r = classify(net, meta, im)
     #print r[:10]
-    net = load_net("./yolov3.cfg", "./yolov3.weights", 0)
-    meta = load_meta("./coco.data")
-    img = "data/dog.jpg"
-    r = detect(net, meta, b"data/dog.jpg")
-    for k in range(len(r)):
-        #print k
-        #print "a"
-        print("Name: ",r[k][0],"Predict %: ",r[k][1],"X: ",r[k][2][0],"Y: ",r[k][2][1],"W: ",r[k][2][2],"Z: ",r[k][2][3],'\n')
-
-
-     #get detected image
-
-
-    #for k in range(len(r)):
-     #   print r[k][2][0]
-      #  print r[k][2][3]
-       # rect = patches.Rectangle((r[k][2][0],r[k][2][3]),r[k][2][2],r[k][2][3],linewidth=1,edgecolor='r',facecolor='none')
-       # ax.add_patch(rect)
-    #plt.show()
-
-   
-    #get detected image
-    im2 = np.array(Image.open(img), dtype=np.uint8)
-    fig,ax = plt.subplots(1)
-    #fig.set_size_inches(imgw,imgh)
-    ax.imshow(im2)
-    for k in range(len(r)):
-        width =  r[k][2][2]
-        height = r[k][2][3]
-        center_x = r[k][2][0]
-        center_y = r[k][2][3]
-        bottomLeft_x = center_x - (width / 2)
-        bottomLeft_y = center_y - (height / 2)
-        rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
-        ax.add_patch(rect)
-    #fig.show()
-    fig.savefig('/home/manish/Documents/detector/darkflow/python/image.jpg')
-    #print (r[:10])
-    print (r[0])
-
-
-def detect_image(image,filename):
-    #net = load_net("cfg/densenet201.cfg", "/home/pjreddie/trained/densenet201.weights", 0)
-    #im = load_image("data/wolf.jpg", 0, 0)
-    #meta = load_meta("cfg/imagenet1k.data")
-    #r = classify(net, meta, im)
-    #print r[:10]
+    net = load_net("cfg/tiny-yolo.cfg", "tiny-yolo.weights", 0)
+    meta = load_meta("cfg/coco.data")
+    r = detect(net, meta, "data/dog.jpg")
+    print r
     
-
+def detect_image(image,filename):
+    
     net = load_net("./yolov3.cfg", "./yolov3.weights", 0)
     meta = load_meta("./coco.data")
     r = detect(net, meta, image)
@@ -220,48 +170,14 @@ def detect_image(image,filename):
     for k in range(len(r)):
         #print k
         #print "a"
-        print("Name: ",r[k][0],"Predict %: ",r[k][1],"X: ",r[k][2][0],"Y: ",r[k][2][1],"W: ",r[k][2][2],"Z: ",r[k][2][3],'\n')
-
-
-     #get detected image
-    #im2 = np.array(Image.open(img), dtype=np.uint8)
-   # fig,ax = plt.subplots(1) 
-
-    #for k in range(len(r)):
-     #   print r[k][2][0]
-      #  print r[k][2][3]
-       # rect = patches.Rectangle((r[k][2][0],r[k][2][3]),r[k][2][2],r[k][2][3],linewidth=1,edgecolor='r',facecolor='none')
-       # ax.add_patch(rect)
-    #plt.show()
-
+        print("Name: ",r[k][0],"Predict %: ",r[k][1],"X: ",r[k][2][0],"Y: ",r[k][2][1],"W: ",r[k][2][2],"Z: ",r[k][2][3],'\n')      
    
     #get detected image
     im2 = np.array(Image.open(image), dtype=np.uint8)
     fig,ax = plt.subplots(1)
     #fig.set_size_inches(imgw,imgh)
     ax.imshow(im2)
-    for k in range(len(r)):
-        width =  r[k][2][2]
-        height = r[k][2][3]
-        center_x = r[k][2][0]
-        center_y = r[k][2][3]
-        bottomLeft_x = center_x - (width / 2)
-        bottomLeft_y = center_y - (height / 2)
-        rect = patches.Rectangle((bottomLeft_x, bottomLeft_y), width, height, linewidth=1, edgecolor='r', facecolor='none')
-        ax.add_patch(rect)
 
     imagepath = './static/' + filename
 
-    #fig.show()
-    fig.savefig(imagepath,bbox_inches="tight")
-   # image = Image.open('./image.jpg')
-   # image.show()
-   # #print (r[:10])
-    plt.close()
-    return r   
-    
-    #def showimage():
-     #   image = Image.open('./image.jpg')
-      #  image.show()
-       # return
-
+    return r  
