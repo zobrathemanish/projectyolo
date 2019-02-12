@@ -1,6 +1,14 @@
 from ctypes import *
 import math
 import random
+import cv2
+import numpy as np
+from Tkinter import *
+from PIL import Image
+#import matplotlib
+#matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 def sample(probs):
     s = sum(probs)
@@ -45,7 +53,7 @@ class METADATA(Structure):
     
 
 #lib = CDLL("/home/pjreddie/documents/darknet/libdarknet.so", RTLD_GLOBAL)
-lib = CDLL("libdarknet.so", RTLD_GLOBAL)
+lib = CDLL("../libdarknet.so", RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
 lib.network_width.restype = c_int
 lib.network_height.argtypes = [c_void_p]
@@ -153,4 +161,23 @@ if __name__ == "__main__":
     r = detect(net, meta, "data/dog.jpg")
     print r
     
+def detect_image(image,filename):
+    
+    net = load_net("./yolov3.cfg", "./yolov3.weights", 0)
+    meta = load_meta("./coco.data")
+    r = detect(net, meta, image)
 
+    for k in range(len(r)):
+        #print k
+        #print "a"
+        print("Name: ",r[k][0],"Predict %: ",r[k][1],"X: ",r[k][2][0],"Y: ",r[k][2][1],"W: ",r[k][2][2],"Z: ",r[k][2][3],'\n')      
+   
+    #get detected image
+    im2 = np.array(Image.open(image), dtype=np.uint8)
+    fig,ax = plt.subplots(1)
+    #fig.set_size_inches(imgw,imgh)
+    ax.imshow(im2)
+
+    imagepath = './static/' + filename
+
+    return r  
