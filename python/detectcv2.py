@@ -36,7 +36,7 @@ def detect_image(imagepath, filepath, dest):
  
   #Perform detection for every image in the files list
   #for f in files:
-  if imagepath.endswith(".jpg") or imagepath.endswith(".jpeg") or imagepath.endswith(".png") or imagepath.endswith(".heic") or imagepath.endswith(".tiff"):
+  if imagepath.endswith(".jpg") or imagepath.endswith(".jpeg") or imagepath.endswith(".png") or imagepath.endswith(".heic") or imagepath.endswith(".tiff") or imagepath.endswith(".HEIC"):
           print (imagepath)
           image_cv2 = cv2.imread(os.path.join(imagepath),cv2.IMREAD_COLOR)
           image_path = bytes(os.path.join(imagepath).encode("utf-8"))
