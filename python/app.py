@@ -49,9 +49,15 @@ def upload():
         result = dcv.detect_image(fullpath, imageFileName,full_filename)
         
         #result1 = darknet.detect_image(fullpath, imageFileName)
+<<<<<<< HEAD
         test = json.dumps({"result": result},sort_keys = True, indent = 4, separators = (',', ': '))
         
         return render_template("index.html",user_image = imageFileName, test = test)
+=======
+        #test = json.dumps({"result": result},sort_keys = True, indent = 4, separators = (',', ': '))
+        
+        return render_template("index.html",user_image = imageFileName)
+>>>>>>> ae2165a48199206d3660c20523c0e905ef026e9c
      
 @application.route('/', methods=['GET', 'POST'])
 def landing():
