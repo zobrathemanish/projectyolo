@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, url_for, make_response, json
+from flask import Flask, render_template, request, jsonify, url_for, make_response, json, redirect, flash
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from Tkinter import *
 from PIL import Image, ExifTags
@@ -21,6 +21,10 @@ import os
 import darknet
 import random
 import detectcv2 as dcv
+import matchfiles as match
+from flask_mysqldb import MySQL 
+import yaml
+
 #from Tkinter import * 
 
 #PEOPLE_FOLDER = os.path.join('static', 'people_photo')
@@ -31,10 +35,54 @@ CORS(application, support_credentials=True)
 photos = UploadSet('photos', IMAGES)
 application.config['UPLOADED_PHOTOS_DEST'] = './static'
 
+db = yaml.load(open('db.yaml'))
+
+application.config['MySQL_HOST'] = db['mysql_host']
+application.config['MySQL_USER'] = db['mysql_user']
+application.config['MySQL_PASSWORD'] = db['mysql_password']
+application.config['MYSQL_DB'] = db['mysql_db']
+
+mysql = MySQL(application)
+
+
 @application.route('/index', methods=['GET', 'POST'])
-def show_index():
-    full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], 'image.jpg')
-    return render_template("index.html", user_image = full_filename)
+def signup():
+    if request.method == 'POST':
+        #fetch form data
+        userDetails = request.form
+        name = userDetails['name']
+        password = userDetails['password']
+        email = userDetails['email']
+        photo = request.files['photo']
+        fullpath = photo.filename
+        full_filename = ''.join(random.choice(string.ascii_uppercase) for _ in range(5)) + '.jpg'
+        photo.save(secure_filename(full_filename))
+        cur = mysql.connection.cursor()
+        x = cur.execute("SELECT photo FROM users WHERE name =%s", [name])
+        if int(x)>0:
+            flash("Username taken")
+            print "Username taken"
+            return render_template("usernametaken.html")
+        else:
+            cur.execute("INSERT INTO users(name,password,email,photo) VALUES(%s, %s, %s, %s)",(name,password,email,full_filename))
+        mysql.connection.commit()
+        cur.close()
+        return redirect ('/users')
+
+    return render_template('landing2.html')
+
+@application.route('/login')
+def login():
+    return render_template('login.html')
+
+@application.route('/users')
+def users():
+    cur = mysql.connection.cursor()
+    resultValue = cur.execute("SELECT * FROM users")
+    if resultValue > 0:
+        userDetails = cur.fetchall()
+
+        return render_template('users.html', userDetails = userDetails)
 
 @application.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -46,32 +94,43 @@ def upload():
         #image.save(fullpath)
         imageFileName = ''.join(random.choice(string.ascii_uppercase) for _ in range(5)) + '.jpg'
         full_filename = os.path.join(application.config['UPLOADED_PHOTOS_DEST'], imageFileName)
-        result = dcv.detect_image(fullpath, imageFileName,full_filename)
-        
+        result = dcv.detect_image(fullpath, imageFileName,full_filename)        
         #result1 = darknet.detect_image(fullpath, imageFileName)
-<<<<<<< HEAD
         test = json.dumps({"result": result},sort_keys = True, indent = 4, separators = (',', ': '))
-        
         return render_template("index.html",user_image = imageFileName, test = test)
-=======
-        #test = json.dumps({"result": result},sort_keys = True, indent = 4, separators = (',', ': '))
+
+@application.route('/upload_FID', methods=['GET', 'POST'])
+def upload_FID():
+    if request.method == 'POST':
+        username = request.form['name']
+        file = request.files['photo']
+        newimg = file.filename    
+        file.save(secure_filename(newimg))
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT photo FROM users WHERE name =%s", [username])
+        userDetails = cur.fetchone()
+        oldimg = userDetails[0]
+        mysql.connection.commit()
+        cur.close()
+        verified = match.verify(newimg, oldimg)
+        verified = "[" + verified.replace("}", "},", verified.count("}")-1) + "]"
+        json_data = json.loads(verified)
+        return jsonify({"result": json_data})
+
         
-        return render_template("index.html",user_image = imageFileName)
->>>>>>> ae2165a48199206d3660c20523c0e905ef026e9c
-     
 @application.route('/', methods=['GET', 'POST'])
 def landing():
     return render_template('landing.html')
 
 
-
-@application.route('/test', methods=['GET', 'POST'])
+@application.route('/viewdatabase', methods=['GET', 'POST'])
 def test():
-    return render_template('landing.html')
+    return render_template('users.html')
 
 
 
 if __name__ == '__main__':
+    application.secret_key = 'some_secret'
 
     application.run(debug=True, port=80, host="0.0.0.0")
 
