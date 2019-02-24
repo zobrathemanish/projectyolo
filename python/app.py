@@ -77,12 +77,7 @@ def login():
 
 @application.route('/users')
 def users():
-    cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT * FROM users")
-    if resultValue > 0:
-        userDetails = cur.fetchall()
-
-        return render_template('users.html', userDetails = userDetails)
+        return render_template('users.html')
 
 @application.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -112,11 +107,17 @@ def upload_FID():
         oldimg = userDetails[0]
         mysql.connection.commit()
         cur.close()
-        verified = match.verify(newimg, oldimg)
-        verified = "[" + verified.replace("}", "},", verified.count("}")-1) + "]"
-        json_data = json.loads(verified)
-        return jsonify({"result": json_data})
-
+        verified1 = match.verify(newimg, oldimg)
+        #verified = "[" + verified1.replace("}", "},", verified1.count("}")-1) + "]"
+        json_data = json.loads(verified1)
+        result = json.dumps({"result": json_data},sort_keys = True, indent = 4, separators = (',', ': '))
+        #resp = json_data.to_dict()
+       # print json_data['score']
+        percent = json_data['score'] *100
+        if percent>90:
+             return render_template("index2.html", result = result)
+        else:
+             return render_template("matchfailed.html")
         
 @application.route('/', methods=['GET', 'POST'])
 def landing():
@@ -125,7 +126,12 @@ def landing():
 
 @application.route('/viewdatabase', methods=['GET', 'POST'])
 def test():
-    return render_template('users.html')
+    cur = mysql.connection.cursor()
+    resultValue = cur.execute("SELECT * FROM users")
+    if resultValue > 0:
+        userDetails = cur.fetchall()
+
+    return render_template('userdatabaselist.html',userDetails = userDetails)
 
 
 
