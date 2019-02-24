@@ -77,7 +77,7 @@ def login():
 
 @application.route('/loginemail')
 def loginemail():
-    return render_template('emaillogin.html')
+	return render_template('emaillogin.html')
 
 @application.route('/users')
 def users():
@@ -109,10 +109,10 @@ def upload_FID():
         cur.execute("SELECT photo FROM users WHERE name =%s", [username])
         userDetails = cur.fetchone()
         try:
-            oldimg = userDetails[0]
+        	oldimg = userDetails[0]
         except TypeError:
-            stmt = 'No such username found'
-            return json.dumps(stmt)
+        	stmt = 'No such username found'
+        	return json.dumps(stmt)
         #oldimg = userDetails[0]
         mysql.connection.commit()
         cur.close()
@@ -136,13 +136,13 @@ def upload_EID():
         password = userDetails['password']
         cur = mysql.connection.cursor()
         value = cur.execute("SELECT * FROM users WHERE email =%s AND password = %s", [email,password])
-        print value
+      	print value
         if int(value)>0:
-            stmt = "Welcome to the page. Verified Successfully."
-            return json.dumps(stmt)
+        	stmt = "Welcome to the page. Verified Successfully."
+        	return json.dumps(stmt)
         else:
-            stmt = "Authentication error"
-            return json.dumps(stmt)
+        	stmt = "Authentication error"
+        	return json.dumps(stmt)
         mysql.connection.commit()
         cur.close()
 
