@@ -75,6 +75,10 @@ def signup():
 def login():
     return render_template('login.html')
 
+@application.route('/loginemail')
+def loginemail():
+    return render_template('emaillogin.html')
+
 @application.route('/users')
 def users():
         return render_template('users.html')
@@ -104,7 +108,12 @@ def upload_FID():
         cur = mysql.connection.cursor()
         cur.execute("SELECT photo FROM users WHERE name =%s", [username])
         userDetails = cur.fetchone()
-        oldimg = userDetails[0]
+        try:
+            oldimg = userDetails[0]
+        except TypeError:
+            stmt = 'No such username found'
+            return json.dumps(stmt)
+        #oldimg = userDetails[0]
         mysql.connection.commit()
         cur.close()
         verified1 = match.verify(newimg, oldimg)
@@ -118,7 +127,25 @@ def upload_FID():
              return render_template("index2.html", result = result)
         else:
              return render_template("matchfailed.html")
-        
+
+@application.route('/upload_EID', methods=['GET', 'POST'])
+def upload_EID():
+    if request.method == 'POST':
+        userDetails = request.form
+        email = userDetails['email']
+        password = userDetails['password']
+        cur = mysql.connection.cursor()
+        value = cur.execute("SELECT * FROM users WHERE email =%s AND password = %s", [email,password])
+        print value
+        if int(value)>0:
+            stmt = "Welcome to the page. Verified Successfully."
+            return json.dumps(stmt)
+        else:
+            stmt = "Authentication error"
+            return json.dumps(stmt)
+        mysql.connection.commit()
+        cur.close()
+
 @application.route('/', methods=['GET', 'POST'])
 def landing():
     return render_template('landing.html')
