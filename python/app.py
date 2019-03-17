@@ -24,6 +24,9 @@ import detectcv2 as dcv
 import matchfiles as match
 from flask_mysqldb import MySQL 
 import yaml
+import cv2
+import label_image
+import label
 
 #from Tkinter import * 
 
@@ -159,6 +162,17 @@ def test():
         userDetails = cur.fetchall()
 
     return render_template('userdatabaselist.html',userDetails = userDetails)
+
+
+
+@application.route('/expression', methods=['GET', 'POST'])
+def expression():
+    return render_template('opencamera.html')
+
+@application.route('/camera', methods=['GET', 'POST'])
+def camera():
+   label.opencamera()
+   return render_template('thanks.html')
 
 
 
