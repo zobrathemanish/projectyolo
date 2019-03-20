@@ -167,7 +167,7 @@ def test():
 
 @application.route('/expression', methods=['GET', 'POST'])
 def expression():
-    return render_template('opencamera.html')
+    return render_template('expindex.html')
 
 @application.route('/camera', methods=['GET', 'POST'])
 def camera():
