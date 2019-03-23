@@ -161,6 +161,9 @@ def test():
     return render_template('userdatabaselist.html',userDetails = userDetails)
 
 
+@application.route('/camdetection', methods=['GET', 'POST'])
+def camdetection():
+    return render_template('camdetection.html')
 
 if __name__ == '__main__':
     application.secret_key = 'some_secret'

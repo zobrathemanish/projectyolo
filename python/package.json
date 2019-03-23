@@ -1,0 +1,43 @@
+{
+    "name": "tfjs-object-detection",
+    "version": "1.0.0",
+    "description": "Object Detection using tensorflow js",
+    "main": "application/index.js",
+    "scripts": {
+        "test": "jest",
+        "start": "node server.js",
+        "build": "rm -rf ./dist && parcel build application/index.html --public-url='/'",
+        "serve": "parcel application/index.html",
+        "run-local": "nodemon server.js"
+    },
+    "author": "Shawon Ashraf",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ShawonAshraf/Webcam-Object-Detection"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
+        "jest": "^22.4.3",
+        "parcel-bundler": "^1.7.1",
+        "webpack": "^4.6.0",
+        "webpack-cli": "^2.0.15"
+    },
+    "dependencies": {
+        "@tensorflow/tfjs": "^0.8.0",
+        "ajv": "^6.4.0",
+        "express": "^4.16.3",
+        "hbs": "^4.0.1",
+        "nodemon": "^1.17.3",
+        "tfjs-yolo-tiny": "0.0.4"
+    },
+    "keywords": [
+        "tensorflow.js",
+        "YOLO",
+        "object detection"
+    ]
+}
