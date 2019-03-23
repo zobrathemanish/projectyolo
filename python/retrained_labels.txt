@@ -1,5 +1,0 @@
-angry
-calm
-happy
-sad
-yawning
