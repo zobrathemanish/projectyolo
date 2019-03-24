@@ -163,7 +163,7 @@ def test():
 
 @application.route('/camdetection', methods=['GET', 'POST'])
 def camdetection():
-    return render_template('clm_emotiondetection.html')
+    return render_template('camdetection.html')
 
 if __name__ == '__main__':
     application.secret_key = 'some_secret'
